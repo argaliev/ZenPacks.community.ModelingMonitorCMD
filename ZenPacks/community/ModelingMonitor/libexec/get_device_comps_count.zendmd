@@ -1,0 +1,16 @@
+#!/usr/bin/env zendmd
+
+import sys
+import os
+
+device = find(sys.argv[2])
+comp_cl_count = int(sys.argv[3])
+
+comp_classes=set()
+for comp in device.getDeviceComponents():
+    comp_classes.add(comp.meta_type)
+if len(comp_classes) < comp_cl_count:
+    print "Monitoring data lost: {0} of {1} component classes presented".format(len(comp_classes), comp_cl_count)
+    sys.exit(3)
+print "OK"
+sys.exit(0)

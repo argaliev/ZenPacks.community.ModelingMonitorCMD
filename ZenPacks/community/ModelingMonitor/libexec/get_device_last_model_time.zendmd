@@ -1,0 +1,15 @@
+#!/usr/bin/env zendmd
+
+import sys
+import datetime
+from dateutil import parser
+
+device = find(sys.argv[2])
+days_past = int(sys.argv[3])
+
+dt = parser.parse(str(device.getSnmpLastCollection().Date()))
+if datetime.datetime.now() - datetime.timedelta(days=days_past) > dt:
+    print "Monitoring data are outdated: last device component collection was performed later than {0} day ago".format(days_past)
+    sys.exit(3)
+print "OK"
+sys.exit(0)

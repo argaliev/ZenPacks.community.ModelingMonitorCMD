@@ -1,0 +1,38 @@
+name: ZenPacks.community.ModelingMonitor
+
+zProperties:
+  zCompClassCount:
+    category: Modeling Monitor
+    type: int
+    default: 0
+  zExpiryDaysPast:
+    category: Modeling Monitor
+    type: int
+    default: 2
+
+device_classes:
+  /Server:
+    zProperties:
+      zDeviceTemplates:
+        - Device
+        - ModelingMonitor
+
+    templates:
+      ModelingMonitor:
+
+        datasources:
+          component_model_status:
+            type: COMMAND
+            parser: Auto
+            cycletime: 86400
+            eventClass: /Status/Modeling/ComponentMismatch
+            severity: 4
+            commandTemplate: "${here/ZenPackManager/packs/ZenPacks.community.ModelingMonitor/path}/libexec/get_device_comps_count.zendmd  ${here/manageIp} ${here/zCompClassCount}"
+
+          last_model_time_status:
+            type: COMMAND
+            parser: Auto
+            cycletime: 86400
+            eventClass: /Status/Modeling/ModelTimeExpired
+            severity: 4
+            commandTemplate: "${here/ZenPackManager/packs/ZenPacks.community.ModelingMonitor/path}/libexec/get_device_last_model_time.zendmd  ${here/manageIp} ${here/zExpiryDaysPast}"
